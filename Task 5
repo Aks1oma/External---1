@@ -32,10 +32,10 @@ res = mod.fit(disp=False)
 
 wald_res = res.wald_test(['KL6=0', 'K618 = 0'], use_f=False)
 
-
+Первым значением будет Test statistic
 wald_res.statistic.round(2), wald_res.pvalue.round(4), wald_res.df_denom
 
-
+Первым значением будет Critical value
 # significant level
 sign_level = 0.1
 chi2.isf(q=sign_level, df=wald_res.df_denom)
