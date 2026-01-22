@@ -1,0 +1,54 @@
+For the dataset TableF5-1 estimate the logit regression LFP~WA+WE+KL6
+
+Consider women with characteristics
+
+   WA  WE  KL6
+1  43  12    0
+2  60  12    0
+3  39   9    0
+Construct a forecast for woman with index 2. Round the answer to 3 decimal places
+
+
+
+
+import numpy as np
+import pandas as pd
+
+from statsmodels.formula.api import logit, probit, ols
+
+# Do not show Warnings
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+# Do not show ValueWarning, ConvergenceWarning из statsmodels
+from statsmodels.tools.sm_exceptions import ValueWarning, ConvergenceWarning
+warnings.simplefilter('ignore', category=ValueWarning)
+warnings.simplefilter('ignore', category=ConvergenceWarning)
+
+
+
+
+# data importing
+df = pd.read_csv('TableF5-1.csv')
+
+
+
+mod = logit(formula = 'LFP~WA+WE+KL6', data = df)
+# mod = probit(formula = 'your specification', data = df)
+res = mod.fit()
+
+
+
+
+# Create a DataFrame with new data
+new_data = pd.DataFrame({'WA': [43, 60, 39], 'WE': [12, 12, 9], 'KL6':[0,0,0] })
+new_data
+
+
+
+# Prediction
+res.predict(new_data.iloc[[1]])
+
+
+
+
+
