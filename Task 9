@@ -34,7 +34,7 @@ res_hc = mod.fit(cov_type='HC3')
 
 
 
-
+Далее будет значение Critical value
 # significance level
 sign_level = 0.05
 # critical value of t-distribution
@@ -42,5 +42,5 @@ t.isf(q=sign_level/2, df=mod.df_resid)
 
 
 
-
+Далее будет значение Test statistic
 res_ols.tvalues["urban"]
