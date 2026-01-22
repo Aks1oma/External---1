@@ -1,0 +1,26 @@
+Load dataset sleep75 and fit the regression sleep~totwrk+age+smsa. Report the coefficient for the regressor age. Round the answer to 2 decimal places
+
+
+
+import numpy as np
+import pandas as pd
+
+from statsmodels.formula.api import ols
+
+# Do not show Warnings
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+
+
+
+# data importing
+df = pd.read_csv('TableF5-1.csv')
+
+
+
+mod = ols(formula = 'LFP~WA+I(WA**2)+CIT+UN+np.log(FAMINC)', data = df)
+res = mod.fit()
+
+
+
+res.params.round(2)
