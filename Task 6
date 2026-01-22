@@ -1,0 +1,54 @@
+For the dataset sleep75 consider a regression sleep ~ totwrk + I(totwrk^2) + south + male + smsa + marr. Fit the model and test the significance of male, smsa, marr.
+
+Calculate test statistic, critical value and make inferences. Round the answer to 3 decimal places. Significant level is 10%. Use non-robust covariance matrix estimator
+
+
+
+
+import pandas as pd
+import numpy as np
+
+from statsmodels.formula.api import ols
+from statsmodels.iolib.summary2 import summary_col # output & reports
+
+from scipy.stats import f # f-distribution & critical values
+
+# Do not show Warning
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+
+
+
+# data importing
+df = pd.read_csv('sleep75.csv')
+
+
+
+# model specification
+mod = ols(formula = 'sleep ~ totwrk + I(totwrk ** 2) + south + male + smsa + marr', data=df)
+# fitting with default (non-robust) covariance matrix estimator
+res_ols = mod.fit()
+# fitting with robust (HC3) covariance matrix estimator
+res_hc = mod.fit(cov_type='HC3')
+
+
+res_ols.params.index
+
+
+
+# Specification of testing hypothesis
+F_test = res_ols.f_test("totwrk = 0, I(totwrk ** 2) = 0, south = 0")
+print(F_test)
+
+
+
+# Test statistics and its P-value
+F_test.statistic, F_test.pvalue
+
+
+
+
+# significance level
+sign_level= 0.10
+# critical value
+f.ppf(1-sign_level, dfn=F_test.df_num, dfd=F_test.df_denom)
