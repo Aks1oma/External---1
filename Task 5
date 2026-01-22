@@ -1,0 +1,41 @@
+For the dataset TableF5-1, estimate the probit regression LFP~WA+I(WA**2)+CIT+UN+np.log(FAMINC). Test the joint significance of ['CIT', 'UN'] using the Wald test.
+
+Provide the test statistic, critical value, and conclusion. Round your answers to 2 decimal places. Significance level: 5%.
+
+
+
+
+import numpy as np
+import pandas as pd
+
+from statsmodels.formula.api import logit, probit
+
+from scipy.stats import chi2 # chi2-distribution & critical values
+
+# Do not show Warnings
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+# Do not show ValueWarning, ConvergenceWarning из statsmodels
+from statsmodels.tools.sm_exceptions import ValueWarning, ConvergenceWarning
+warnings.simplefilter('ignore', category=ValueWarning)
+warnings.simplefilter('ignore', category=ConvergenceWarning)
+
+
+# data importing
+df = pd.read_csv('TableF5-1.csv')
+
+
+mod = probit(formula = 'LFP~KL6+K618+CIT+UN', data = df)
+# mod = probit(formula = 'your specification', data = df)
+res = mod.fit(disp=False)
+
+
+wald_res = res.wald_test(['KL6=0', 'K618 = 0'], use_f=False)
+
+
+wald_res.statistic.round(2), wald_res.pvalue.round(4), wald_res.df_denom
+
+
+# significant level
+sign_level = 0.1
+chi2.isf(q=sign_level, df=wald_res.df_denom)
