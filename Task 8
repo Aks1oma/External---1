@@ -1,0 +1,41 @@
+For the dataset TableF5-1, estimate the logit regression LFP~WA+I(WA**2)+CIT+UN+np.log(FAMINC) and test its overall significance. 
+Provide the test statistic, critical value, and conclusion. Round your answers to 2 decimal places. Significance level: 1%.
+
+
+
+import numpy as np
+import pandas as pd
+from statsmodels.formula.api import logit, probit
+
+# Do not show Warnings
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+# Do not show ValueWarning, ConvergenceWarning из statsmodels
+from statsmodels.tools.sm_exceptions import ValueWarning, ConvergenceWarning
+warnings.simplefilter('ignore', category=ValueWarning)
+warnings.simplefilter('ignore', category=ConvergenceWarning)
+
+
+# data importing
+df = pd.read_csv('TableF5-1.csv')
+
+
+mod = logit(formula = 'LFP~WA+I(WA**2)+CIT+UN+np.log(FAMINC)', data = df)
+# mod = probit(formula = , data = df)
+res = mod.fit(disp=False)
+
+
+res.params.round(2)
+
+
+res.llr, res.llr_pvalue
+
+
+res.df_model
+
+
+from scipy.stats import chi2 # chi2-distribution & critical values
+
+
+sign_level = 0.01
+chi2.isf(q=sign_level, df=res.df_model)
