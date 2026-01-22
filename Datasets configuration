@@ -1,0 +1,89 @@
+TASK 1
+For the dataset TableF5-1, estimate the probit regression LFP~WA+I(WA**2)+CIT+UN+np.log(FAMINC). Provide the coefficient for regressor UN. Round your answer to 2 decimal places.
+
+import numpy as np
+import pandas as pd
+
+from statsmodels.formula.api import logit, probit, ols
+
+# Do not show Warnings
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+# Do not show ValueWarning, ConvergenceWarning из statsmodels
+from statsmodels.tools.sm_exceptions import ValueWarning, ConvergenceWarning
+warnings.simplefilter('ignore', category=ValueWarning)
+warnings.simplefilter('ignore', category=ConvergenceWarning)
+
+# data importing
+df = pd.read_csv('TableF5-1.csv')
+
+mod = probit(formula = 'LFP~WA+I(WA**2)+CIT+UN+np.log(FAMINC)', data = df)
+# mod = probit(formula = 'your specification', data = df)
+res = mod.fit()
+
+print(res.summary())
+
+
+
+
+
+TASK 2
+For the dataset wage2 fit a regression log(wage) on age, IQ & south. Evaluate R^2 and Radj^2. Round the answer to tree decimal places.
+
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+
+# load data
+data = pd.read_csv('Labour.csv')
+
+# fit regression model using formula
+reg = smf.ols(formula='np.log(output) ~ np.log(capital) + np.log(labour)', data=data)
+results = reg.fit()
+
+# print R-squared and adjusted R-squared
+print(round(results.rsquared, 3))
+print(round(results.rsquared_adj, 3))
+
+
+
+
+
+TASK 3
+For the dataset sleep75 consider a regression sleep ~ totwrk + I(totwrk^2) + yngkid + marr + union. Fit the model and test overall significance of the model.
+Calculate test statistic, critical value and make inferences. Round the answer to 3 decimal places. Significant level is 5%. Use non-robust covariance matrix estimator
+
+
+import pandas as pd
+import numpy as np
+
+from statsmodels.formula.api import ols
+from statsmodels.iolib.summary2 import summary_col # output & reports
+
+from scipy.stats import f # f-distribution & critical values
+
+# Do not show Warning
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+
+
+# data importing
+df = pd.read_csv('sleep75.csv')
+
+
+# model specification
+mod = ols(formula = 'sleep ~ smsa + yngkid + marr' , data=df)
+# fitting with default (non-robust) covariance matrix estimator
+res_ols = mod.fit()
+# fitting with robust (HC3) covariance matrix estimator
+res_hc = mod.fit(cov_type='HC3')
+
+
+# degrees of freedom for F-distribution
+mod.df_model, mod.df_resid
+
+
+# significance level
+sign_level= 0.05
+# полученное значение - critical
+f.isf(q=sign_level, dfn=mod.df_model, dfd=mod.df_resid)
