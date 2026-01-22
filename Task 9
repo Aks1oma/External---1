@@ -1,0 +1,46 @@
+Load dataset sleep75 and fit the regression sleep~totwrk+age+smsa+union. We test significance of beta[union]. Perform non-robust test and report test statistic, critical value and make a conclusion. 
+Round the answers to 2 decimal places. Significant level is 5.0%
+
+
+
+
+
+import pandas as pd
+import numpy as np
+
+from statsmodels.formula.api import ols
+from statsmodels.iolib.summary2 import summary_params, summary_col # output & reports
+
+from scipy.stats import t # t-distribution & critical values
+
+# Do not show warnings
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+
+
+
+
+# data importing
+df = pd.read_csv('wage2.csv')
+
+
+
+# model specification via formula
+mod = ols(formula = 'np.log(wage)~age+IQ+urban', data=df)
+# fitting with default (non-robust) covariance matrix estimator
+res_ols = mod.fit()
+# fitting with robust (HC3) covariance matrix estimator
+res_hc = mod.fit(cov_type='HC3')
+
+
+
+
+# significance level
+sign_level = 0.05
+# critical value of t-distribution
+t.isf(q=sign_level/2, df=mod.df_resid)
+
+
+
+
+res_ols.tvalues["urban"]
