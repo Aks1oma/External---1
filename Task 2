@@ -1,0 +1,18 @@
+For the dataset wage2 fit a regression log(wage) on age, IQ & south. Evaluate R^2 and Radj^2. Round the answer to tree decimal places.
+
+
+
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+
+# load data
+data = pd.read_csv('Labour.csv')
+
+# fit regression model using formula
+reg = smf.ols(formula='np.log(output) ~ np.log(capital) + np.log(labour)', data=data)
+results = reg.fit()
+
+# print R-squared and adjusted R-squared
+print(round(results.rsquared, 3))
+print(round(results.rsquared_adj, 3))
