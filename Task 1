@@ -1,0 +1,31 @@
+For the dataset TableF5-1, estimate the probit regression LFP~WA+I(WA**2)+CIT+UN+np.log(FAMINC). Provide the coefficient for regressor UN. Round your answer to 2 decimal places.
+
+
+
+
+import numpy as np
+import pandas as pd
+
+from statsmodels.formula.api import logit, probit, ols
+
+# Do not show Warnings
+import warnings
+warnings.simplefilter(action='ignore', category=Warning)
+# Do not show ValueWarning, ConvergenceWarning из statsmodels
+from statsmodels.tools.sm_exceptions import ValueWarning, ConvergenceWarning
+warnings.simplefilter('ignore', category=ValueWarning)
+warnings.simplefilter('ignore', category=ConvergenceWarning)
+
+
+# data importing
+df = pd.read_csv('TableF5-1.csv')
+
+
+mod = probit(formula = 'LFP~WA+I(WA**2)+CIT+UN+np.log(FAMINC)', data = df)
+# mod = probit(formula = 'your specification', data = df)
+res = mod.fit()
+
+
+print(res.summary())
+
+
